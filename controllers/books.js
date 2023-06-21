@@ -1,0 +1,25 @@
+const Book = require('../model/Books');
+
+// GET all books
+const getAllBooks = async (req, res) => {
+  try {
+    const books = await Book.find();
+    res.json(books);
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+// POST a new book
+const createBook = async (req, res) => {
+  try {
+    const { title, author, genre } = req.body;
+    const book = new Book({ title, year, genre, writer, audience, pages});
+    await book.save();
+    res.status(201).json(book);
+  } catch (err) {
+    res.status(400).json({ error: 'Invalid data' });
+  }
+};
+
+module.exports = { getAllBooks, createBook };
