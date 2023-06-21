@@ -1,5 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const swaggerUi = require('swagger-ui-express');
+//const swaggerDocument = require('./swagger.yaml');
+const YAML = require('yamljs');
+const swaggerDocument = YAML.load('./swagger.yaml');
 const bookRoutes = require('./routes/books');
 
 const app = express();
@@ -20,6 +24,9 @@ mongoose
   })
   .then(() => {
     console.log('Connected to MongoDB');
+
+    // Serve Swagger UI
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
     // Routes
     app.use('/api/books', bookRoutes);

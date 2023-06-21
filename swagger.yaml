@@ -1,0 +1,50 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: Library Management API
+  description: API documentation for the Library Management System
+
+basePath: /api
+
+paths:
+  /books:
+    get:
+      summary: Retrieve all books
+      responses:
+        200:
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Book"
+    post:
+      summary: Add a new book
+      parameters:
+        - name: book
+          in: body
+          description: Book object
+          required: true
+          schema:
+            $ref: "#/definitions/Book"
+      responses:
+        200:
+          description: Successful operation
+          schema:
+            $ref: "#/definitions/Book"
+
+definitions:
+  Book:
+    type: object
+    properties:
+      title:
+        type: string
+      year:
+        type: string
+      genre:
+        type: string
+      writer:
+        type: string
+      audience:
+        type: string
+      pages:
+        type: string
