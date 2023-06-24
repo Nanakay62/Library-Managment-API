@@ -37,4 +37,39 @@ const createBook = async (req, res) => {
     }
   };
 
-module.exports = { getAllBooks, createBook, getBookById };
+  // UPDATE a book by ID, using the PUT functions
+const updateBookById = async (req, res) => {
+  try {
+    const bookId = req.params.id;
+    const { title, year, genre, writer, audience, pages } = req.body;
+    const updatedBook = await Book.findByIdAndUpdate(
+      bookId,
+      { title, year, genre, writer, audience, pages },
+      { new: true }
+    );
+    if (!updatedBook) {
+      return res.status(404).json({ error: 'Book not found' });
+    }
+    res.json(updatedBook);
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+// DELETE a book by ID using the deleteByBookID constant and an Ajax request.
+const deleteBookById = async (req, res) => {
+  try {
+    const bookId = req.params.id;
+    const deletedBook = await Book.findByIdAndRemove(bookId);
+    if (!deletedBook) {
+      return res.status(404).json({ error: 'Book not found' });
+    }
+    res.json({ message: 'Book deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
+// Exporting all functions to the main server where it would be called.
+module.exports = { getAllBooks, createBook, getBookById, updateBookById,deleteBookById };

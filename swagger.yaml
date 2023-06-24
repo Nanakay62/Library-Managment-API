@@ -1,39 +1,158 @@
-swagger: "2.0"
+swagger: '2.0'
 info:
-  version: "1.0.0"
+  version: 1.0.0
   title: Library Management API
-  description: API documentation for the Library Management System
-
-basePath: /api
-
 paths:
-  /books:
+  /api/books:
     get:
-      summary: Retrieve all books
+      summary: Get all books
       responses:
-        200:
+        '200':
           description: Successful operation
-          schema:
-            type: array
-            items:
-              $ref: "#/definitions/Book"
+
     post:
-      summary: Add a new book
+      summary: Create a new book
       parameters:
-        - name: book
+        - name: body
           in: body
-          description: Book object
           required: true
           schema:
-            $ref: "#/definitions/Book"
+            $ref: '#/definitions/BookInput'
       responses:
-        200:
+        '201':
+          description: Book created successfully
+        '400':
+          description: Invalid data
+
+  /api/books/{id}:
+    get:
+      summary: Get a book by ID
+      parameters:
+        - name: id
+          in: path
+          description: Book ID
+          required: true
+          type: string
+      responses:
+        '200':
           description: Successful operation
+        '404':
+          description: Book not found
+
+    put:
+      summary: Update a book by ID
+      parameters:
+        - name: id
+          in: path
+          description: Book ID
+          required: true
+          type: string
+        - name: body
+          in: body
+          required: true
           schema:
-            $ref: "#/definitions/Book"
+            $ref: '#/definitions/BookInput'
+      responses:
+        '200':
+          description: Book updated successfully
+        '404':
+          description: Book not found
+
+    delete:
+      summary: Delete a book by ID
+      parameters:
+        - name: id
+          in: path
+          description: Book ID
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Book deleted successfully
+        '404':
+          description: Book not found
+
+  /api/users:
+    get:
+      summary: Get all users
+      responses:
+        '200':
+          description: Successful operation
+
+    post:
+      summary: Create a new user
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: User created successfully
+        '400':
+          description: Invalid data provided
+
+  /api/users/{id}:
+    get:
+      summary: Get a user by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+          description: ID of the user
+      responses:
+        '200':
+          description: User retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+
+    put:
+      summary: Update a user by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+          description: ID of the user
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: User updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+        '400':
+          description: Invalid data provided
+
+    delete:
+      summary: Delete a user by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+          description: ID of the user
+      responses:
+        '204':
+          description: User deleted successfully
+        '404':
+          description: User not found
 
 definitions:
-  Book:
+  BookInput:
     type: object
     properties:
       title:
@@ -47,4 +166,62 @@ definitions:
       audience:
         type: string
       pages:
+        type: integer
+    required:
+      - title
+      - year
+      - genre
+      - writer
+      - audience
+      - pages
+
+        ValidationError:
+    type: object
+    properties:
+      errors:
+        type: array
+        items:
+          $ref: '#/definitions/ValidationErrorItem'
+
+  ValidationErrorItem:
+    type: object
+    properties:
+      location:
         type: string
+      param:
+        type: string
+      msg:
+        type: string
+    required:
+      - location
+      - param
+      - msg
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        favoriteColor:
+          type: string
+        birthday:
+          type: string
+          format: date
+        favoriteGenre:
+          type: string
+        favoriteAuthor:
+          type: string
+      required:
+        - firstName
+        - lastName
+        - email
+        - favoriteColor
+        - birthday
+        - favoriteGenre
+        - favoriteAuthor
