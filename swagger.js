@@ -14,8 +14,8 @@ const swaggerDefinition = {
   },
   servers: [
     {
-      url: 'http://localhost:4000',
-      description: 'Local server',
+      url: 'library-management-api-n823.onrender.com',
+      description: 'server',
     },
   ],
 };
