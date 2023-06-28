@@ -61,6 +61,17 @@ mongoose
       }
     );
 
+    // Redirect HTTP to HTTPS
+    app.use((req, res, next) => {
+      if (req.secure) {
+        // If request is already secure (HTTPS), proceed to the next middleware
+        next();
+      } else {
+        // Redirect HTTP request to HTTPS
+        res.redirect(`https://${req.headers.host}${req.url}`);
+      }
+    });
+
     // Start the server after successful database connection
     app.listen(port, () => {
       console.log(`Server is listening on port ${port}`);
