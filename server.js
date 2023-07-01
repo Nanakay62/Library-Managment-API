@@ -9,6 +9,8 @@ const passport = require('passport');
 const session = require('express-session');
 const twitterAuthStrategy = require('./twitterAuth');
 const crypto = require('crypto');
+const redis = require('redis');
+const redisStore = require('connect-redis')(session);
 
 const app = express();
 const port = 4000;
@@ -22,17 +24,30 @@ passport.deserializeUser((user, done) => {
   done(null, user);
 });
 
-// Generate a secure session secret
 const sessionSecret = crypto.randomBytes(32).toString('hex');
+
+// Create a Redis client
+const redisClient = redis.createClient({
+  host: 'localhost', // Redis server host
+  port: 6379, // Redis server port
+  // Add any additional Redis configuration options if required
+});
 
 // Middleware
 app.use(express.json());
-app.use(session({ secret: sessionSecret, resave: false, saveUninitialized: false }));
+app.use(
+  session({
+    secret: sessionSecret,
+    resave: false,
+    saveUninitialized: false,
+    store: new redisStore({ client: redisClient }),
+  })
+);
 app.use(passport.initialize());
 app.use(passport.session());
 
 // The authentication strategy
-passport.use('twitter-auth', twitterAuthStrategy);
+passport.use('twitter-auth', twitterAuthStrategy); // Updated authentication strategy
 
 // Set the MongoDB URI
 process.env.MONGODB_URI = 'mongodb+srv://nanakwamedickson:bacteria1952@cluster0.hhph3e6.mongodb.net/';
@@ -55,7 +70,7 @@ mongoose
     app.use('/api/users', usersRouter);
 
     // Twitter OAuth routes
-    app.get('/auth/twitter', passport.authenticate('twitter-auth'));
+    app.get('/auth/twitter', passport.authenticate('twitter-auth')); // Updated authentication route
     app.get(
       '/auth/twitter/callback',
       passport.authenticate('twitter-auth', { failureRedirect: '/login' }),
@@ -71,7 +86,7 @@ mongoose
         // If the request is already secure (HTTPS), proceed to the next middleware
         next();
       } else {
-        // Redirect HTTP request to HTTPS
+        // Redirect the HTTP request to HTTPS
         res.redirect(`https://${req.headers.host}${req.url}`);
       }
     });
