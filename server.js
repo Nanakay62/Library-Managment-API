@@ -7,7 +7,8 @@ const bookRoutes = require('./routes/books');
 const usersRouter = require('./routes/users');
 const passport = require('passport');
 const session = require('express-session');
-const twitterAuthStrategy = require('./twitterAuth'); // Updated import
+const twitterAuthStrategy = require('./twitterAuth');
+const crypto = require('crypto');
 
 const app = express();
 const port = 4000;
@@ -21,9 +22,10 @@ passport.deserializeUser((user, done) => {
   done(null, user);
 });
 
+const sessionSecret = crypto.randomBytes(32).toString('hex');
 // Middleware
 app.use(express.json());
-app.use(session({ secret: 'your-secret-key', resave: false, saveUninitialized: false }));
+app.use(session({ secret: sessionSecret, resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
 app.use(passport.session());
 
