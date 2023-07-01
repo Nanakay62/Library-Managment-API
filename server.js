@@ -7,7 +7,7 @@ const bookRoutes = require('./routes/books');
 const usersRouter = require('./routes/users');
 const passport = require('passport');
 const session = require('express-session');
-const googleAuthStrategy = require('./googleAuth');
+const twitterAuthStrategy = require('./twitterAuth'); // Updated import
 
 const app = express();
 const port = 4000;
@@ -27,8 +27,8 @@ app.use(session({ secret: 'your-secret-key', resave: false, saveUninitialized: f
 app.use(passport.initialize());
 app.use(passport.session());
 
-//the authentication strategy 
-passport.use('google-auth', googleAuthStrategy);
+//the authentication strategy
+passport.use('twitter-auth', twitterAuthStrategy); // Updated authentication strategy
 
 // Set the MongoDB URI
 process.env.MONGODB_URI = 'mongodb+srv://nanakwamedickson:bacteria1952@cluster0.hhph3e6.mongodb.net/';
@@ -49,12 +49,12 @@ mongoose
     // Routes
     app.use('/api/books', bookRoutes);
     app.use('/api/users', usersRouter);
-    
-    // Google OAuth routes
-    app.get('/auth/google', passport.authenticate('google-auth', { scope: ['profile', 'email'] }));
+
+    // Twitter OAuth routes
+    app.get('/auth/twitter', passport.authenticate('twitter-auth')); // Updated authentication route
     app.get(
-      '/auth/google/callback',
-      passport.authenticate('google-auth', { failureRedirect: '/login' }),
+      '/auth/twitter/callback',
+      passport.authenticate('twitter-auth', { failureRedirect: '/login' }),
       (req, res) => {
         // Redirect or perform any other actions after successful authentication
         res.redirect('/');
@@ -78,5 +78,5 @@ mongoose
     });
   })
   .catch((err) => {
-    console.error('Failed to connect to MongoDB:', err);
+    console.error('Error connecting to MongoDB', err);
   });
