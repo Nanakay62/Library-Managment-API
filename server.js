@@ -55,9 +55,15 @@ passport.use(
       callbackURL: 'https://library-management-api-n823.onrender.com/auth/google/callback',
     },
     (accessToken, refreshToken, profile, done) => {
-      // Handle the authentication callback
-      // You can save the user profile to the database or perform any other necessary actions
-      return done(null, profile);
+      const user = {
+        id: profile.id,
+        email: profile.emails[0].value,
+        name: profile.displayName,
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+      };
+
+      done(null, user);
     }
   )
 );
