@@ -27,7 +27,7 @@ app.use(session({ secret: 'your-secret-key', resave: false, saveUninitialized: f
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Use the authentication strategy with a name
+//the authentication strategy 
 passport.use('google-auth', googleAuthStrategy);
 
 // Set the MongoDB URI
