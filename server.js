@@ -22,15 +22,17 @@ passport.deserializeUser((user, done) => {
   done(null, user);
 });
 
+// Generate a secure session secret
 const sessionSecret = crypto.randomBytes(32).toString('hex');
+
 // Middleware
 app.use(express.json());
 app.use(session({ secret: sessionSecret, resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
 app.use(passport.session());
 
-//the authentication strategy
-passport.use('twitter-auth', twitterAuthStrategy); // Updated authentication strategy
+// The authentication strategy
+passport.use('twitter-auth', twitterAuthStrategy);
 
 // Set the MongoDB URI
 process.env.MONGODB_URI = 'mongodb+srv://nanakwamedickson:bacteria1952@cluster0.hhph3e6.mongodb.net/';
@@ -53,7 +55,7 @@ mongoose
     app.use('/api/users', usersRouter);
 
     // Twitter OAuth routes
-    app.get('/auth/twitter', passport.authenticate('twitter-auth')); // Updated authentication route
+    app.get('/auth/twitter', passport.authenticate('twitter-auth'));
     app.get(
       '/auth/twitter/callback',
       passport.authenticate('twitter-auth', { failureRedirect: '/login' }),
@@ -66,7 +68,7 @@ mongoose
     // Redirect HTTP to HTTPS
     app.use((req, res, next) => {
       if (req.secure) {
-        // If request is already secure (HTTPS), proceed to the next middleware
+        // If the request is already secure (HTTPS), proceed to the next middleware
         next();
       } else {
         // Redirect HTTP request to HTTPS
@@ -74,7 +76,7 @@ mongoose
       }
     });
 
-    // Start the server after successful database connection
+    // Start the server after a successful database connection
     app.listen(port, () => {
       console.log(`Server is listening on port ${port}`);
     });
