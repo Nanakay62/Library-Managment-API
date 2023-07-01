@@ -61,46 +61,45 @@ passport.use(
   )
 );
 
-// Set the MongoDB URI
-process.env.MONGODB_URI = 'mongodb+srv://nanakwamedickson:bacteria1952@cluster0.hhph3e6.mongodb.net/'; // Update with your MongoDB URI
+// Serve Swagger UI
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-// Connect to MongoDB
-mongoose
-  .connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
-    console.log('Connected to MongoDB');
+// Routes
+app.use('/api/books', bookRoutes);
+app.use('/api/users', usersRouter);
 
-    // Serve Swagger UI
-    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
-    // Routes
-    app.use('/api/books', bookRoutes);
-    app.use('/api/users', usersRouter);
-
-    // Twitter OAuth routes
-    app.get('/auth/twitter', passport.authenticate('twitter'));
-    app.get(
-      '/auth/twitter/callback',
-      passport.authenticate('twitter', { failureRedirect: '/login' }),
-      (req, res) => {
-        // Save the session and redirect
-        req.login(req.user, (err) => {
-          if (err) {
-            console.error('Error saving session:', err);
-          }
-          res.redirect('/');
-        });
+// Twitter OAuth routes
+app.get('/auth/twitter', passport.authenticate('twitter'));
+app.get(
+  '/auth/twitter/callback',
+  passport.authenticate('twitter', { failureRedirect: '/login' }),
+  (req, res) => {
+    // Save the session and redirect
+    req.login(req.user, (err) => {
+      if (err) {
+        console.error('Error saving session:', err);
       }
-    )
-
-    // Start the server after a successful database connection
-    app.listen(port, () => {
-      console.log(`Server is listening on port ${port}`);
+      res.redirect('/');
     });
-  })
-  .catch((err) => {
-    console.error('Error connecting to MongoDB', err);
-  });
+  }
+);
+
+// Start the server
+app.listen(port, () => {
+  console.log(`Server is listening on port ${port}`);
+
+  // Set the MongoDB URI
+process.env.MONGODB_URI = 'mongodb+srv://nanakwamedickson:bacteria1952@cluster0.hhph3e6.mongodb.net/';
+  // Connect to MongoDB
+  mongoose
+    .connect(process.env.MONGODB_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    })
+    .then(() => {
+      console.log('Connected to MongoDB');
+    })
+    .catch((err) => {
+      console.error('Error connecting to MongoDB', err);
+    });
+});
