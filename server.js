@@ -7,10 +7,8 @@ const bookRoutes = require('./routes/books');
 const usersRouter = require('./routes/users');
 const passport = require('passport');
 const session = require('express-session');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const TwitterStrategy = require('passport-twitter').Strategy;
 const crypto = require('crypto');
-const redis = require('redis');
-const redisStore = require('connect-redis')(session);
 
 const app = express();
 const port = 4000;
@@ -26,13 +24,6 @@ passport.deserializeUser((user, done) => {
 
 const sessionSecret = crypto.randomBytes(32).toString('hex');
 
-// Create a Redis client
-const redisClient = redis.createClient({
-  host: 'localhost', // Redis server host
-  port: 6379, // Redis server port
-  // Add any additional Redis configuration options if required
-});
-
 // Middleware
 app.use(express.json());
 app.use(
@@ -40,27 +31,26 @@ app.use(
     secret: sessionSecret,
     resave: false,
     saveUninitialized: false,
-    store: new redisStore({ client: redisClient }),
   })
 );
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Google OAuth configuration
+// Twitter OAuth configuration
 passport.use(
-  new GoogleStrategy(
+  new TwitterStrategy(
     {
-      clientID: '182055713047-h4o31a7p4v2rdpd3d1tlaq5a3emtpiqo.apps.googleusercontent.com',
-      clientSecret: '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',
-      callbackURL: 'https://library-management-api-n823.onrender.com/auth/google/callback',
+      consumerKey: 'KNWouMHGOUVtYaKawaxd8m8JZ',
+      consumerSecret: 'CbVZEYBiovKvsRHEkAFAAP3ci45GLRzAbT5vIRX6nnNlPSCUEd',
+      callbackURL: 'https://library-management-api-n823.onrender.com/auth/twitter/callback',
     },
-    (accessToken, refreshToken, profile, done) => {
+    (token, tokenSecret, profile, done) => {
       const user = {
         id: profile.id,
-        email: profile.emails[0].value,
-        name: profile.displayName,
-        accessToken: accessToken,
-        refreshToken: refreshToken,
+        displayName: profile.displayName,
+        username: profile.username,
+        token: token,
+        tokenSecret: tokenSecret,
       };
 
       done(null, user);
@@ -87,14 +77,11 @@ mongoose
     app.use('/api/books', bookRoutes);
     app.use('/api/users', usersRouter);
 
-    // Google OAuth routes
+    // Twitter OAuth routes
+    app.get('/auth/twitter', passport.authenticate('twitter'));
     app.get(
-      '/auth/google',
-      passport.authenticate('google', { scope: ['profile', 'email'] })
-    );
-    app.get(
-      '/auth/google/callback',
-      passport.authenticate('google', { failureRedirect: '/login' }),
+      '/auth/twitter/callback',
+      passport.authenticate('twitter', { failureRedirect: '/login' }),
       (req, res) => {
         // Redirect or perform any other actions after successful authentication
         res.redirect('/');
