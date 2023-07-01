@@ -53,6 +53,7 @@ passport.use(
       clientID: '182055713047-h4o31a7p4v2rdpd3d1tlaq5a3emtpiqo.apps.googleusercontent.com',
       clientSecret: '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',
       callbackURL: 'https://library-management-api-n823.onrender.com/auth/google/callback',
+      scope: ['profile', 'email'],
     },
     (accessToken, refreshToken, profile, done) => {
       const user = {
