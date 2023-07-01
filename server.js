@@ -82,12 +82,12 @@ mongoose
 
     // Redirect HTTP to HTTPS
     app.use((req, res, next) => {
-      if (req.secure) {
-        // If the request is already secure (HTTPS), proceed to the next middleware
-        next();
-      } else {
-        // Redirect the HTTP request to HTTPS
+      if (req.headers['x-forwarded-proto'] && req.headers['x-forwarded-proto'] === 'http') {
+        // If the request is made over HTTP, redirect to HTTPS
         res.redirect(`https://${req.headers.host}${req.url}`);
+      } else {
+        // If the request is already secure (HTTPS) or the 'x-forwarded-proto' header is missing, proceed to the next middleware
+        next();
       }
     });
 
