@@ -1,4 +1,4 @@
-const passport = require('passport');
+/*const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 passport.use(
@@ -22,4 +22,4 @@ passport.use(
   )
 );
 
-module.exports = passport;
+module.exports = passport;*/
