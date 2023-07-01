@@ -23,7 +23,7 @@ passport.deserializeUser((id, done) => {
   User.findById(id, (err, user) => {
     done(err, user);
   });
-})
+});
 const sessionSecret = crypto.randomBytes(32).toString('hex');
 
 // Middleware
