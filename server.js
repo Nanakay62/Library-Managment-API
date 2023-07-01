@@ -18,10 +18,12 @@ passport.serializeUser((user, done) => {
   done(null, user);
 });
 
-passport.deserializeUser((user, done) => {
-  done(null, user);
-});
-
+passport.deserializeUser((id, done) => {
+  // Retrieve user from the database based on the ID
+  User.findById(id, (err, user) => {
+    done(err, user);
+  });
+})
 const sessionSecret = crypto.randomBytes(32).toString('hex');
 
 // Middleware
@@ -84,10 +86,15 @@ mongoose
       '/auth/twitter/callback',
       passport.authenticate('twitter', { failureRedirect: '/login' }),
       (req, res) => {
-        // Redirect or perform any other actions after successful authentication
-        res.redirect('/');
+        // Save the session and redirect
+        req.login(req.user, (err) => {
+          if (err) {
+            console.error('Error saving session:', err);
+          }
+          res.redirect('/');
+        });
       }
-    );
+    )
 
     // Start the server after a successful database connection
     app.listen(port, () => {
