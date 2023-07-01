@@ -19,6 +19,7 @@
     "mongoose": "^7.3.0",
     "passport": "^0.6.0",
     "passport-google-oauth20": "^2.0.0",
+    "passport-twitter": "^0.1.5",
     "swagger": "^0.0.1",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui": "^4.15.4",
