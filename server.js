@@ -90,6 +90,7 @@ app.listen(port, () => {
 
   // Set the MongoDB URI
 process.env.MONGODB_URI = 'mongodb+srv://nanakwamedickson:bacteria1952@cluster0.hhph3e6.mongodb.net/';
+
   // Connect to MongoDB
   mongoose
     .connect(process.env.MONGODB_URI, {
