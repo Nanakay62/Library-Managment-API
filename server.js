@@ -89,7 +89,7 @@ app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
 
   // Set the MongoDB URI
-process.env.MONGODB_URI = 'mongodb+srv://nanakwamedickson:bacteria1952@cluster0.hhph3e6.mongodb.net/';
+process.env.MONGODB_URI = 'mongodb+srv://nanakwamedickson:bacteria1952@cluster0.hhph3e6.mongodb.net/library';
 
   // Connect to MongoDB
   mongoose
