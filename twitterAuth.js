@@ -1,4 +1,4 @@
-const passport = require('passport');
+/*const passport = require('passport');
 const TwitterStrategy = require('passport-twitter').Strategy;
 
 passport.use(
@@ -21,4 +21,4 @@ passport.use(
   )
 );
 
-module.exports = passport;
+module.exports = passport;*/
