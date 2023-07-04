@@ -46,8 +46,6 @@ passport.use(
       consumerSecret: 'CbVZEYBiovKvsRHEkAFAAP3ci45GLRzAbT5vIRX6nnNlPSCUEd',
       callbackURL: 'https://library-management-api-n823.onrender.com/auth/twitter/callback',
       profileFields: ['id', 'displayName', 'username', 'email', 'photos'],
-      access_token_key: '4574398215-PHZOhK8DhnuspbCcrFBJhzXbBNuxp2ZkBjEnipm',
-      access_token_secret: 'iVjMYZj0N5UdKjrFBpptvlYhLxEgeP0AJPtBtef4W79iK',
     },
     (token, tokenSecret, profile, done) => {
       const user = {
