@@ -9,7 +9,7 @@ const passport = require('passport');
 const session = require('express-session');
 const TwitterStrategy = require('passport-twitter').Strategy;
 const crypto = require('crypto');
-const User = require('./model/User'); // Import the User model using the correct path
+const User = require('./model/User'); 
 
 const app = express();
 const port = 4000;
