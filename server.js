@@ -9,6 +9,7 @@ const passport = require('passport');
 const session = require('express-session');
 const TwitterStrategy = require('passport-twitter').Strategy;
 const crypto = require('crypto');
+const User = require('./model/User'); // Import the User model using the correct path
 
 const app = express();
 const port = 4000;
@@ -24,6 +25,7 @@ passport.deserializeUser((id, done) => {
     done(err, user);
   });
 });
+
 const sessionSecret = crypto.randomBytes(32).toString('hex');
 
 // Middleware
@@ -56,7 +58,7 @@ passport.use(
         tokenSecret: tokenSecret,
       };
 
-      done(null, user);
+      return done(null, user);
     }
   )
 );
