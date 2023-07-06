@@ -10,6 +10,9 @@ const session = require('express-session');
 const TwitterStrategy = require('passport-twitter').Strategy;
 const crypto = require('crypto');
 const User = require('./model/User'); 
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 const app = express();
 const port = 4000;
@@ -91,7 +94,7 @@ app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
 
   // Set the MongoDB URI
-  process.env.MONGODB_URI = 'mongodb+srv://nanakwamedickson:bacteria1952@cluster0.hhph3e6.mongodb.net/library';
+
 
   // Connect to MongoDB
   mongoose
