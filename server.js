@@ -45,13 +45,13 @@ app.use(passport.session());
 
 // Twitter OAuth configuration
 passport.use(
-  new TwitterStrategy(
-    {
-      consumerKey: 'KNWouMHGOUVtYaKawaxd8m8JZ',
-      consumerSecret: 'CbVZEYBiovKvsRHEkAFAAP3ci45GLRzAbT5vIRX6nnNlPSCUEd',
-      callbackURL: 'https://library-management-api-n823.onrender.com/auth/twitter/callback',
-      profileFields: ['id', 'displayName', 'username', 'email', 'photos'],
-    },
+    new TwitterStrategy(
+      {
+        consumerKey: process.env.consumerKey,
+        consumerSecret: process.env.consumerSecret,
+        callbackURL: 'https://library-management-api-n823.onrender.com/auth/twitter/callback',
+        profileFields: ['id', 'displayName', 'username', 'email', 'photos'],
+      },
     (token, tokenSecret, profile, done) => {
       const user = {
         id: profile.id,
