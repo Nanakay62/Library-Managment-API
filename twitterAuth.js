@@ -16,11 +16,7 @@ passport.use(
       done(null, user);
     }
   )
-);
-
-Bearer token = AAAAAAAAAAAAAAAAAAAAAMYiogEAAAAAtjrNaSxk7ySYGhR7mSG5MqOiTFY%3DHAgKLHDFqF0Bh7SiVEQ64LDKfCU3jbS51ynO3XWCx7R3WQ583b
-Access token = 4574398215-PHZOhK8DhnuspbCcrFBJhzXbBNuxp2ZkBjEnipm
-Access token secret = iVjMYZj0N5UdKjrFBpptvlYhLxEgeP0AJPtBtef4W79iK
+)
 
 
 module.exports = passport;*/
