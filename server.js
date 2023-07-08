@@ -60,8 +60,8 @@ app.use(passport.session());
 passport.use(
   new TwitterStrategy(
     {
-      consumerKey: Dgah4tndpkCzgZwlSnQ3x0yKr,
-      consumerSecret: knwMjExbzb29kNKqOQRDfyDFHCAXJ0hF7y5ZnNghHyRTHEiPwS,
+      consumerKey: process.env.consumerKey,
+      consumerSecret: process.env.consumerSecret,
       callbackURL: 'https://library-management-api-n823.onrender.com/auth/twitter/callback',
       profileFields: ['id', 'displayName', 'username', 'email', 'photos'],
     },
