@@ -9,8 +9,9 @@ const passport = require('passport');
 const session = require('express-session');
 const TwitterStrategy = require('passport-twitter').Strategy;
 const crypto = require('crypto');
-const User = require('./model/User'); 
+const User = require('./model/User');
 const dotenv = require('dotenv');
+const MongoDBStore = require('connect-mongodb-session')(session);
 
 dotenv.config();
 
@@ -31,6 +32,17 @@ passport.deserializeUser((id, done) => {
 
 const sessionSecret = crypto.randomBytes(32).toString('hex');
 
+// MongoDB session store
+const store = new MongoDBStore({
+  uri: process.env.MONGODB_URI,
+  collection: 'sessions',
+});
+
+// Catch session store errors
+store.on('error', (error) => {
+  console.error('Session store error:', error);
+});
+
 // Middleware
 app.use(express.json());
 app.use(
@@ -38,6 +50,7 @@ app.use(
     secret: sessionSecret,
     resave: false,
     saveUninitialized: false,
+    store: store, // Use the MongoDB session store
   })
 );
 app.use(passport.initialize());
@@ -45,13 +58,13 @@ app.use(passport.session());
 
 // Twitter OAuth configuration
 passport.use(
-    new TwitterStrategy(
-      {
-        consumerKey: process.env.consumerKey,
-        consumerSecret: process.env.consumerSecret,
-        callbackURL: 'https://library-management-api-n823.onrender.com/auth/twitter/callback',
-        profileFields: ['id', 'displayName', 'username', 'email', 'photos'],
-      },
+  new TwitterStrategy(
+    {
+      consumerKey: process.env.consumerKey,
+      consumerSecret: process.env.consumerSecret,
+      callbackURL: 'https://library-management-api-n823.onrender.com/auth/twitter/callback',
+      profileFields: ['id', 'displayName', 'username', 'email', 'photos'],
+    },
     (token, tokenSecret, profile, done) => {
       const user = {
         id: profile.id,
@@ -94,7 +107,6 @@ app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
 
   // Set the MongoDB URI
-
 
   // Connect to MongoDB
   mongoose
