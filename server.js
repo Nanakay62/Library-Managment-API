@@ -1,3 +1,4 @@
+const dotenv = require('dotenv');
 const express = require('express');
 const mongoose = require('mongoose');
 const swaggerUi = require('swagger-ui-express');
@@ -10,7 +11,6 @@ const session = require('express-session');
 const TwitterStrategy = require('passport-twitter').Strategy;
 const crypto = require('crypto');
 const User = require('./model/User');
-const dotenv = require('dotenv');
 const MongoDBStore = require('connect-mongodb-session')(session);
 
 dotenv.config();
