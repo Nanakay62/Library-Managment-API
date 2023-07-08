@@ -10,8 +10,6 @@ passport.use(
         id: profile.id,
         displayName: profile.displayName,
       };
-      user.token = token;
-      user.tokenSecret = tokenSecret;
 
       done(null, user);
     }
