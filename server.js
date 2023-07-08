@@ -1,4 +1,5 @@
 const dotenv = require('dotenv');
+dotenv.config();
 const express = require('express');
 const mongoose = require('mongoose');
 const swaggerUi = require('swagger-ui-express');
@@ -13,7 +14,7 @@ const crypto = require('crypto');
 const User = require('./model/User');
 const MongoDBStore = require('connect-mongodb-session')(session);
 
-dotenv.config();
+
 
 const app = express();
 const port = 4000;
