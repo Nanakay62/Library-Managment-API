@@ -79,7 +79,7 @@ passport.use(
   )
 );
 // Twitter OAuth configuration
-passport.use(
+/*passport.use(
   new TwitterStrategy(
     {
       consumerKey: process.env.consumerKey,
@@ -99,7 +99,7 @@ passport.use(
       return done(null, user);
     }
   )
-);
+);*/
 
 // Serve Swagger UI
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
@@ -126,7 +126,7 @@ app.get(
 );
 
 // Twitter OAuth routes
-app.get('/auth/twitter', passport.authenticate('twitter'));
+/*app.get('/auth/twitter', passport.authenticate('twitter'));
 app.get(
   '/auth/twitter/callback',
   passport.authenticate('twitter', { failureRedirect: '/login' }),
@@ -140,7 +140,7 @@ app.get(
     });
   }
 );
-
+*/
 // Start the server
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
