@@ -10,12 +10,9 @@ const usersRouter = require('./routes/users');
 const passport = require('passport');
 const session = require('express-session');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const TwitterStrategy = require('passport-twitter').Strategy;
 const crypto = require('crypto');
 const User = require('./model/User');
 const MongoDBStore = require('connect-mongodb-session')(session);
-
-
 
 const app = express();
 const port = 4000;
@@ -58,8 +55,6 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-
-
 passport.use(
   new GoogleStrategy(
     {
@@ -72,34 +67,13 @@ passport.use(
         id: profile.id,
         displayName: profile.displayName,
         email: profile.emails[0].value,
-        // Add other relevant information from the profile if needed
+        accessToken, // Save the accessToken to the user object
+        refreshToken, // Save the refreshToken to the user object
       };
       return done(null, user);
     }
   )
 );
-// Twitter OAuth configuration
-/*passport.use(
-  new TwitterStrategy(
-    {
-      consumerKey: process.env.consumerKey,
-      consumerSecret: process.env.consumerSecret,
-      callbackURL: 'https://library-management-api-n823.onrender.com/auth/twitter/callback',
-      profileFields: ['id', 'displayName', 'username', 'email', 'photos'],
-    },
-    (token, tokenSecret, profile, done) => {
-      const user = {
-        id: profile.id,
-        displayName: profile.displayName,
-        username: profile.username,
-        token: token,
-        tokenSecret: tokenSecret,
-      };
-
-      return done(null, user);
-    }
-  )
-);*/
 
 // Serve Swagger UI
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
@@ -125,22 +99,6 @@ app.get(
   }
 );
 
-// Twitter OAuth routes
-/*app.get('/auth/twitter', passport.authenticate('twitter'));
-app.get(
-  '/auth/twitter/callback',
-  passport.authenticate('twitter', { failureRedirect: '/login' }),
-  (req, res) => {
-    // Save the session and redirect
-    req.login(req.user, (err) => {
-      if (err) {
-        console.error('Error saving session:', err);
-      }
-      res.redirect('/');
-    });
-  }
-);
-*/
 // Start the server
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
