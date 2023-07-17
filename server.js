@@ -9,6 +9,7 @@ const bookRoutes = require('./routes/books');
 const usersRouter = require('./routes/users');
 const passport = require('passport');
 const session = require('express-session');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const TwitterStrategy = require('passport-twitter').Strategy;
 const crypto = require('crypto');
 const User = require('./model/User');
@@ -57,6 +58,26 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+
+
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.googleClientID,
+      clientSecret: process.env.googleClientSecret,
+      callbackURL: 'https://library-management-api-n823.onrender.com/auth/google/callback',
+    },
+    (accessToken, refreshToken, profile, done) => {
+      const user = {
+        id: profile.id,
+        displayName: profile.displayName,
+        email: profile.emails[0].value,
+        // Add other relevant information from the profile if needed
+      };
+      return done(null, user);
+    }
+  )
+);
 // Twitter OAuth configuration
 passport.use(
   new TwitterStrategy(
