@@ -108,6 +108,23 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/api/books', bookRoutes);
 app.use('/api/users', usersRouter);
 
+// Google OAuth routes
+app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+app.get(
+  '/auth/google/callback',
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  (req, res) => {
+    // Save the session and redirect
+    req.login(req.user, (err) => {
+      if (err) {
+        console.error('Error saving session:', err);
+      }
+      res.redirect('/');
+    });
+  }
+);
+
 // Twitter OAuth routes
 app.get('/auth/twitter', passport.authenticate('twitter'));
 app.get(
