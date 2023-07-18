@@ -49,7 +49,7 @@ app.use(
     secret: sessionSecret,
     resave: false,
     saveUninitialized: false,
-    store: store, // Use the MongoDB session store
+    store: store, // Use the MongoD
   })
 );
 app.use(passport.initialize());
@@ -58,8 +58,8 @@ app.use(passport.session());
 passport.use(
   new GoogleStrategy(
     {
-      clientID: process.env.googleClientID,
-      clientSecret: process.env.googleClientSecret,
+      googleClientID: process.env.googleClientID,
+      googleClientSecret: process.env.googleClientSecret,
       callbackURL: 'https://library-management-api-n823.onrender.com/auth/google/callback',
     },
     (accessToken, refreshToken, profile, done) => {
