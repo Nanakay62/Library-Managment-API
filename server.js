@@ -58,8 +58,8 @@ app.use(passport.session());
 passport.use(
   new GoogleStrategy(
     {
-      googleClientID: process.env.googleClientID,
-      googleClientSecret: process.env.googleClientSecret,
+      clientID: process.env.googleClientID,
+      clientSecret: process.env.googleClientSecret,
       callbackURL: 'https://library-management-api-n823.onrender.com/auth/google/callback',
     },
     (accessToken, refreshToken, profile, done) => {
